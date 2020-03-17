@@ -14,7 +14,8 @@ class ZomatoDart {
   /// Map for headers and other params to be added to
   Map<String, String> _headersMap;
 
-  ZomatoDart(this._userKey, {json = true}) {
+  // TODO: complete logging
+  ZomatoDart(this._userKey, {json = true, logging = true}) {
     if (_userKey == null || _userKey == '') {
       throw (Exception('user-key not provided'));
     }
@@ -118,6 +119,16 @@ class ZomatoDart {
       {Map<String, String> paramsMap, Map<String, String> headersMap}) async {
     print("Fetching response from Zomato API for endpoint: $endpoint");
 
+    List<String> params = _buildParams(paramsMap);
+
+    print(uri + '?' + (params.isEmpty ? '' : params.join('&')));
+    http.Response response =
+        await client.get(uri + '?' + (params.isEmpty ? '' : params.join('&')), headers: _headersMap);
+
+    return response;
+  }
+
+  List<String> _buildParams(Map<String, String> paramsMap) {
     List<String> params;
     // Build params string if params are present
     if (paramsMap != null) {
@@ -130,10 +141,7 @@ class ZomatoDart {
         });
       }
     }
-    print(uri + '?' + (params.isEmpty ? '' : params.join('&')));
-    http.Response response =
-        await client.get(uri + '?' + (params.isEmpty ? '' : params.join('&')), headers: _headersMap);
-
-    return response;
+    return params;
   }
 }
+

@@ -8,6 +8,6 @@ void main(List<String> args) async {
   // var cats = await ZomatoDart(userKey).categories();
   // print(cats.first.name);
 
-  var cities = await ZomatoDart(userKey).cities();
+  var cities = await ZomatoDart(userKey).cities(cityName: "Los Angeles", count: 5);
   print(cities.length);
 }
