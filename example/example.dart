@@ -12,6 +12,12 @@ void main(List<String> args) async {
   // var cities = await ZomatoDart(userKey).cities(cityName: "Los Angeles", count: 5);
   // print(cities.length);
 
-  var collections = await ZomatoDart(userKey).collections();
-  print(collections.first.title);
+  // var collections = await ZomatoDart(userKey).collections();
+  // print(collections.first.title);
+
+  // Be mindful of bad coordinates
+  // var cuisines = await ZomatoDart(userKey).cuisines(latitude: "40", longitude: "-37");
+
+  var cuisines = await ZomatoDart(userKey).cuisines(cityId:280);
+  print(cuisines.length);
 }

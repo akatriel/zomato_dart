@@ -27,6 +27,7 @@ class ZomatoDart {
       'Accept': 'application/' + (json ? 'json' : 'xml')
     };
   }
+
   /// Get a list of categories
   Future<List<Category>> categories() async {
     String endpoint = '/categories';
@@ -118,15 +119,11 @@ class ZomatoDart {
     return cities;
   }
 
-  void _printExceptionMessage(e, String endpoint) {
-    print("There an error extracting objects from $endpoint");
-    print(e);
-  }
-
   /// Returns Zomato Restaurant Collections in a City.
   /// Requires either city_id or lat/lon.
-  Future<List<Collection>> collections({int cityId, String latitude, String longitude, int count}) async {
-    _validateCollectionsParameters(cityId, latitude, longitude);
+  Future<List<Collection>> collections(
+      {int cityId, String latitude, String longitude, int count}) async {
+    _validateLocationParameters(cityId, latitude, longitude);
 
     Map<String, String> paramsMap = {
       'city_id': cityId?.toString(),
@@ -155,17 +152,52 @@ class ZomatoDart {
     return collections;
   }
 
-  void _validateCollectionsParameters(int cityId, String latitude, String longitude) {
+  Future<List<Cuisine>> cuisines(
+      {int cityId, String latitude, String longitude}) async {
+    _validateLocationParameters(cityId, latitude, longitude);
+
+    Map<String, String> paramsMap = {
+      'city_id': cityId?.toString(),
+      'lat': latitude,
+      'lon': longitude,
+    };
+
+    String endpoint = '/cuisines';
+    String uri = _baseUri + endpoint;
+    http.Response response =
+        await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+
+    List<Cuisine> cuisines;
+    if (response.statusCode == 200) {
+      cuisines = List<Cuisine>();
+      var decodedJson = convert.jsonDecode(response.body);
+
+      for (var c in decodedJson['cuisines']) {
+        cuisines.add(Cuisine.fromJson(c['cuisine']));
+      }
+    } else {
+      _printBadResponse(response);
+    }
+
+    return cuisines;
+  }
+
+  void _validateLocationParameters(
+      int cityId, String latitude, String longitude) {
     if (cityId == null) {
-      if (latitude == null && longitude == null)
-      {
-        throw InvalidArgumentsException("cityId or lat/lon is null and must be provided.");
-      } 
-      else if (latitude == null || longitude == null)
-      {
-        throw InvalidArgumentsException("latitude and longitude must be provided together, or provide a cityId.");
+      if (latitude == null && longitude == null) {
+        throw InvalidArgumentsException(
+            "cityId or lat/lon is null and must be provided.");
+      } else if (latitude == null || longitude == null) {
+        throw InvalidArgumentsException(
+            "latitude and longitude must be provided together, or provide a cityId.");
       }
     }
+  }
+
+  void _printExceptionMessage(e, String endpoint) {
+    print("There an error extracting objects from $endpoint");
+    print(e);
   }
 
   void _printBadResponse(http.Response response) {
