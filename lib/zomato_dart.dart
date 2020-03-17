@@ -2,14 +2,16 @@ import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:zomato_dart/models/models.dart';
 
-/// An API wrapper in Dart for the Zomato API
+/// An API wrapper in Dart for the Zomato API.
+/// See https://developers.zomato.com/documentation
+/// for details about the API.
 class ZomatoDart {
   /// The Zomato provided user-key
   final String _userKey;
 
   /// base uri for each endpoint to be added to
   static const String _baseUri = 'https://developers.zomato.com/api/v2.1';
-  var client = http.Client();
+  var _client = http.Client();
 
   /// Map for headers and other params to be added to
   Map<String, String> _headersMap;
@@ -41,7 +43,7 @@ class ZomatoDart {
       print("The Zomato response was unsuccessful");
     }
 
-    client?.close();
+    _client?.close();
     return categories;
   }
 
@@ -67,7 +69,6 @@ class ZomatoDart {
     return categories;
   }
 
-
   /// return a list of cities based on the provided paramaters
   /// The cities returned are found under the "location_suggestions" key
   Future<List<City>> cities(
@@ -79,18 +80,18 @@ class ZomatoDart {
     String endpoint = '/cities';
     String uri = _baseUri + endpoint;
     List<City> cities;
-    
+
     Map<String, String> paramsMap = {
       'q': cityName,
-      'lon' : longitude,
-      'lat' : latitude,
-      'city_ids' : cityIds?.join(', '),
-      'count' : count?.toString()
+      'lon': longitude,
+      'lat': latitude,
+      'city_ids': cityIds?.join(', '),
+      'count': count?.toString()
     };
-    
+
     // remove params not provided
-    paramsMap.removeWhere((k,v) => v == null);
-    
+    paramsMap.removeWhere((k, v) => v == null);
+
     try {
       var response = await sendRequest(uri, endpoint, paramsMap: paramsMap);
       print('Zomato Response Status Code: ${response?.statusCode}');
@@ -101,8 +102,8 @@ class ZomatoDart {
         var jsonDecoded = convert.jsonDecode(response.body);
         // _InternalLinkedHashMap<String, dynamic>
         // print(jsonDecoded.runtimeType);
-        if (jsonDecoded['location_suggestions'] != null ){
-          for(var c in jsonDecoded['location_suggestions']) {
+        if (jsonDecoded['location_suggestions'] != null) {
+          for (var c in jsonDecoded['location_suggestions']) {
             cities.add(City.fromJson(c));
           }
         }
@@ -119,23 +120,26 @@ class ZomatoDart {
       {Map<String, String> paramsMap, Map<String, String> headersMap}) async {
     print("Fetching response from Zomato API for endpoint: $endpoint");
 
-    List<String> params = _buildParams(paramsMap);
-
-    print(uri + '?' + (params.isEmpty ? '' : params.join('&')));
-    http.Response response =
-        await client.get(uri + '?' + (params.isEmpty ? '' : params.join('&')), headers: _headersMap);
+    List<String> params = _buildParamsList(paramsMap);
+    
+    // build url from params string
+    String url = uri + '?' + (params.isEmpty ? '' : params.join('&'));
+    print(url);
+    
+    http.Response response = await _client.get(
+        url,
+        headers: _headersMap);
 
     return response;
   }
 
-  List<String> _buildParams(Map<String, String> paramsMap) {
+  List<String> _buildParamsList(Map<String, String> paramsMap) {
     List<String> params;
-    // Build params string if params are present
     if (paramsMap != null) {
-      paramsMap.removeWhere((k,v) => v == null);
+      paramsMap.removeWhere((k, v) => v == null);
       params = List<String>();
 
-      if(!paramsMap.isEmpty) {     
+      if (!paramsMap.isEmpty) {
         paramsMap.forEach((k, v) {
           params.add('$k=$v');
         });
@@ -144,4 +148,3 @@ class ZomatoDart {
     return params;
   }
 }
-
