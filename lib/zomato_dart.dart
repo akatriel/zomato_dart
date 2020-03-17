@@ -152,6 +152,8 @@ class ZomatoDart {
     return collections;
   }
 
+  /// Get a list of all cuisines of restaurants listed in a city.
+  /// Either cityId or lat/lon must be provided.
   Future<List<Cuisine>> cuisines(
       {int cityId, String latitude, String longitude}) async {
     _validateLocationParameters(cityId, latitude, longitude);
@@ -180,6 +182,38 @@ class ZomatoDart {
     }
 
     return cuisines;
+  }
+
+  /// Get a list of restaurant types in a city.
+  /// Either cityId or lat/lon must be provided.
+  Future<List<Establishment>> establishments(
+      {int cityId, String latitude, String longitude}) async {
+    _validateLocationParameters(cityId, latitude, longitude);
+
+    Map<String, String> paramsMap = {
+      'city_id': cityId?.toString(),
+      'lat': latitude,
+      'lon': longitude,
+    };
+
+    String endpoint = '/establishments';
+    String uri = _baseUri + endpoint;
+    http.Response response =
+        await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+
+    List<Establishment> establishments;
+    if (response.statusCode == 200) {
+      establishments = List<Establishment>();
+      var decodedJson = convert.jsonDecode(response.body);
+
+      for (var c in decodedJson['establishments']) {
+        establishments.add(Establishment.fromJson(c['establishment']));
+      }
+    } else {
+      _printBadResponse(response);
+    }
+
+    return establishments;
   }
 
   void _validateLocationParameters(
