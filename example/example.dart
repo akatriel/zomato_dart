@@ -21,6 +21,9 @@ void main(List<String> args) async {
   // var cuisines = await ZomatoDart(userKey).cuisines(cityId:280);
   // print(cuisines.first.cuisineName);
 
-  var establishments = await ZomatoDart(userKey).establishments(cityId:280);
-  print(establishments.first.name);
+  // var establishments = await ZomatoDart(userKey).establishments(cityId:280);
+  // print(establishments.first.name);
+
+  var locations = await ZomatoDart(userKey).locations("Chelsea Market");
+  print(locations.first.title);
 }

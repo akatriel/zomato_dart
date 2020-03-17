@@ -184,6 +184,7 @@ class ZomatoDart {
     return cuisines;
   }
 
+  // TODO: extremely similar to Cuisines and Collections. Consider refactoring.
   /// Get a list of restaurant types in a city.
   /// Either cityId or lat/lon must be provided.
   Future<List<Establishment>> establishments(
@@ -214,6 +215,36 @@ class ZomatoDart {
     }
 
     return establishments;
+  }
+
+  /// Search for Zomato locations by keyword. Provide coordinates to get better search results
+  Future<List<Location>> locations(String query,
+      {String latitude, String longitude, int count}) async {
+    Map<String, String> paramsMap = {
+      'query': query,
+      'lat': latitude,
+      'lon': longitude,
+      'count': count?.toString(),
+    };
+
+    String endpoint = '/locations';
+    String uri = _baseUri + endpoint;
+    http.Response response =
+        await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+
+    List<Location> locations;
+    if (response.statusCode == 200) {
+      locations = List<Location>();
+      var decodedJson = convert.jsonDecode(response.body);
+
+      for (var c in decodedJson['location_suggestions']) {
+        locations.add(Location.fromJson(c));
+      }
+    } else {
+      _printBadResponse(response);
+    }
+
+    return locations;
   }
 
   void _validateLocationParameters(
@@ -249,7 +280,8 @@ class ZomatoDart {
     // build url from params string
     String url = uri + '?' + (params.isEmpty ? '' : params.join('&'));
     print(url);
-
+    
+    // TODO: encode uri before sending.
     http.Response response = await _client.get(url, headers: _headersMap);
     _client?.close();
 
