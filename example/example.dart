@@ -24,6 +24,12 @@ void main(List<String> args) async {
   // var establishments = await ZomatoDart(userKey).establishments(cityId:280);
   // print(establishments.first.name);
 
-  var locations = await ZomatoDart(userKey).locations("Chelsea Market");
-  print(locations.first.title);
+  // var locations = await ZomatoDart(userKey).locations("Chelsea Market");
+  // print(locations.first.title);
+
+  var locationdetail = await ZomatoDart(userKey).locationDetails(118273, "subzone");
+  print(locationdetail.bestRatedRestaurants.first.name);
+  print(locationdetail.bestRatedRestaurants.first.location.localityVerbose);
+  print(locationdetail.bestRatedRestaurants.first.photos.first.url);
+  print(locationdetail.bestRatedRestaurants.first.photos.first.user.name);
 }

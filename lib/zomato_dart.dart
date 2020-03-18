@@ -34,16 +34,12 @@ class ZomatoDart {
     String uri = _baseUri + endpoint;
 
     List<Category> categories;
-    try {
-      http.Response response = await _sendRequest(uri, endpoint);
+    http.Response response = await _sendRequest(uri, endpoint);
 
-      if (response.statusCode == 200) {
-        categories = _extractCategories(response.body);
-      } else {
-        _printBadResponse(response);
-      }
-    } catch (e) {
-      _printExceptionMessage(e, endpoint);
+    if (response.statusCode == 200) {
+      categories = _extractCategories(response.body);
+    } else {
+      _printBadResponse(response);
     }
 
     return categories;
@@ -94,12 +90,10 @@ class ZomatoDart {
     // remove params not provided
     paramsMap.removeWhere((k, v) => v == null);
 
+    var response = await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+    cities = List<City>();
+
     try {
-      var response = await _sendRequest(uri, endpoint, paramsMap: paramsMap);
-      print('Zomato Response Status Code: ${response?.statusCode}');
-
-      cities = List<City>();
-
       if (response.statusCode == 200) {
         var jsonDecoded = convert.jsonDecode(response.body);
         // _InternalLinkedHashMap<String, dynamic>
@@ -134,19 +128,24 @@ class ZomatoDart {
 
     String endpoint = '/collections';
     String uri = _baseUri + endpoint;
+
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
 
     List<Collection> collections;
-    if (response.statusCode == 200) {
-      collections = List<Collection>();
-      var decodedJson = convert.jsonDecode(response.body);
+    try {
+      if (response.statusCode == 200) {
+        collections = List<Collection>();
+        var decodedJson = convert.jsonDecode(response.body);
 
-      for (var c in decodedJson['collections']) {
-        collections.add(Collection.fromJson(c['collection']));
+        for (var c in decodedJson['collections']) {
+          collections.add(Collection.fromJson(c['collection']));
+        }
+      } else {
+        _printBadResponse(response);
       }
-    } else {
-      _printBadResponse(response);
+    } catch (e) {
+      _printExceptionMessage(e, endpoint);
     }
 
     return collections;
@@ -203,15 +202,20 @@ class ZomatoDart {
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
 
     List<Establishment> establishments;
-    if (response.statusCode == 200) {
-      establishments = List<Establishment>();
-      var decodedJson = convert.jsonDecode(response.body);
 
-      for (var c in decodedJson['establishments']) {
-        establishments.add(Establishment.fromJson(c['establishment']));
+    try {
+      if (response.statusCode == 200) {
+        establishments = List<Establishment>();
+        var decodedJson = convert.jsonDecode(response.body);
+
+        for (var c in decodedJson['establishments']) {
+          establishments.add(Establishment.fromJson(c['establishment']));
+        }
+      } else {
+        _printBadResponse(response);
       }
-    } else {
-      _printBadResponse(response);
+    } catch (e) {
+      _printExceptionMessage(e, endpoint);
     }
 
     return establishments;
@@ -233,18 +237,50 @@ class ZomatoDart {
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
 
     List<Location> locations;
-    if (response.statusCode == 200) {
-      locations = List<Location>();
-      var decodedJson = convert.jsonDecode(response.body);
 
-      for (var c in decodedJson['location_suggestions']) {
-        locations.add(Location.fromJson(c));
+    try {
+      if (response.statusCode == 200) {
+        locations = List<Location>();
+        var decodedJson = convert.jsonDecode(response.body);
+
+        for (var c in decodedJson['location_suggestions']) {
+          locations.add(Location.fromJson(c));
+        }
+      } else {
+        _printBadResponse(response);
       }
-    } else {
-      _printBadResponse(response);
+    } catch (e) {
+      _printExceptionMessage(e, endpoint);
+    }
+    return locations;
+  }
+
+  /// Get Foodie Index, Nightlife Index, Top Cuisines and Best rated restaurants in a given location
+  /// Arguments for this method are produced from a call to the locations api
+  Future<LocationDetail> locationDetails(
+      int entityId, String entityType) async {
+    Map<String, String> paramsMap = {
+      'entity_id': entityId?.toString(),
+      'entity_type': entityType
+    };
+
+    String endpoint = '/location_details';
+    String uri = _baseUri + endpoint;
+    http.Response response =
+        await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+    LocationDetail locationDetail;
+    try {
+      if (response.statusCode == 200) {
+        var json = convert.jsonDecode(response.body);
+        locationDetail = LocationDetail.fromJson(json);
+      } else {
+        _printBadResponse(response);
+      }
+    } catch (e) {
+      _printExceptionMessage(e, endpoint);
     }
 
-    return locations;
+    return locationDetail;
   }
 
   void _validateLocationParameters(
@@ -274,25 +310,30 @@ class ZomatoDart {
   Future<http.Response> _sendRequest(String uri, String endpoint,
       {Map<String, String> paramsMap, Map<String, String> headersMap}) async {
     print("Fetching response from Zomato API for endpoint: $endpoint");
+    http.Response response;
 
-    List<String> params = _buildParamsList(paramsMap);
+    try {
+      List<String> params = _buildParamsList(paramsMap);
 
-    // build url from params string
-    String url = uri + '?' + (params.isEmpty ? '' : params.join('&'));
-    print(url);
-    
-    // TODO: encode uri before sending.
-    http.Response response = await _client.get(url, headers: _headersMap);
-    _client?.close();
+      // build url from params string
+      String url = uri + '?' + (params.isEmpty ? '' : params.join('&'));
+      print(url);
+
+      // TODO: encode uri before sending.
+      response = await _client.get(url, headers: _headersMap);
+      _client?.close();
+    } catch (e) {
+      print("There was an exception while sending a requst");
+      print(e);
+    }
 
     return response;
   }
 
   List<String> _buildParamsList(Map<String, String> paramsMap) {
-    List<String> params;
+    List<String> params = List<String>();
     if (paramsMap != null) {
       paramsMap.removeWhere((k, v) => v == null);
-      params = List<String>();
 
       if (!paramsMap.isEmpty) {
         paramsMap.forEach((k, v) {
