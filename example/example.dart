@@ -18,6 +18,18 @@ void main(List<String> args) async {
   // Be mindful of bad coordinates
   // var cuisines = await ZomatoDart(userKey).cuisines(latitude: "40", longitude: "-37");
 
-  var cuisines = await ZomatoDart(userKey).cuisines(cityId:280);
-  print(cuisines.length);
+  // var cuisines = await ZomatoDart(userKey).cuisines(cityId:280);
+  // print(cuisines.first.cuisineName);
+
+  // var establishments = await ZomatoDart(userKey).establishments(cityId:280);
+  // print(establishments.first.name);
+
+  // var locations = await ZomatoDart(userKey).locations("Chelsea Market");
+  // print(locations.first.title);
+
+  var locationdetail = await ZomatoDart(userKey).locationDetails(118273, "subzone");
+  print(locationdetail.bestRatedRestaurants.first.name);
+  print(locationdetail.bestRatedRestaurants.first.location.localityVerbose);
+  print(locationdetail.bestRatedRestaurants.first.photos.first.url);
+  print(locationdetail.bestRatedRestaurants.first.photos.first.user.name);
 }
