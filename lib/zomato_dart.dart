@@ -317,6 +317,36 @@ class ZomatoDart {
     return geocode;
   }
 
+  /// returns a single restaurant based on a provided id
+  Future<Restaurant> restaurant(String id) async {
+    Map<String, String> paramsMap = {
+      'res_id': id
+    };
+    
+    if (id == null || id.isEmpty) {
+      throw (InvalidArgumentsException(
+          "id must be provided"));
+    }
+
+    String endpoint = '/restaurant';
+    String uri = _baseUri + endpoint;
+    http.Response response =
+        await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+    Restaurant restaurant;
+    try {
+      if (response.statusCode == 200) {
+        var json = convert.jsonDecode(response.body);
+        restaurant = Restaurant.fromJson(json);
+      } else {
+        _printBadResponse(response);
+      }
+    } catch (e) {
+      _printExceptionMessage(e, endpoint);
+    }
+
+    return restaurant;
+  }
+
   void _validateLocationParameters(
       int cityId, String latitude, String longitude) {
     if (cityId == null) {

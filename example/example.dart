@@ -33,9 +33,12 @@ void main(List<String> args) async {
   // print(locationdetail.bestRatedRestaurants.first.photos.first.url);
   // print(locationdetail.bestRatedRestaurants.first.photos.first.user.name);
 
-  var geocode = await ZomatoDart(userKey).geocode("39.973609", "-75.128669");
-  print(geocode.link);
-  print(geocode.location.cityName);
-  print(geocode.popularity.subzone);
-  print(geocode.nearbyRestaurants.first.name);
+  // var geocode = await ZomatoDart(userKey).geocode("39.973609", "-75.128669");
+  // print(geocode.link);
+  // print(geocode.location.cityName);
+  // print(geocode.popularity.subzone);
+  // print(geocode.nearbyRestaurants.first.id);
+
+  var restaurant = await ZomatoDart(userKey).restaurant("17016328");
+  print(restaurant.name);
 }

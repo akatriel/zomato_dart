@@ -72,8 +72,6 @@ class Establishment {
   }
 }
 
-// TODO: return to geocode
-
 class Location {
   /// city, zone, subzone, landmark, group, metro, street
   String entityType;
@@ -145,7 +143,7 @@ class LocationDetail {
     if (json['best_rated_restaurant'] != null) {
       bestRatedRestaurants = new List<Restaurant>();
       json['best_rated_restaurant'].forEach((v) {
-        bestRatedRestaurants.add(new Restaurant.fromJson(v));
+        bestRatedRestaurants.add(new Restaurant.fromListOfJson(v));
       });
     }
   }
@@ -210,7 +208,7 @@ class Restaurant {
   List<String> establishment;
   // ^^^^^Not in documention
 
-  Restaurant.fromJson(Map<String, dynamic> json) {
+  Restaurant.fromListOfJson(Map<String, dynamic> json) {
     if (json['restaurant'] != null) {
       r = json['R'] != null ? R.fromJson(json['restaurant']['R']) : null;
       id = json['restaurant']['id'];
@@ -266,9 +264,62 @@ class Restaurant {
       establishment = json['restaurant']['establishment']?.cast<String>();
     }
   }
+
+  Restaurant.fromJson(Map<String, dynamic> json) {
+    r = json['R'] != null ? R.fromJson(json['R']) : null;
+    id = json['id'];
+    name = json['name'];
+    url = json['url'];
+    location = json['location'] != null
+        ? ResLocation.fromJson(json['location'])
+        : null;
+    switchToOrderMenu = json['switch_to_order_menu'];
+    cuisines = json['cuisines'];
+    timings = json['timings'];
+    averageCostForTwo = json['average_cost_for_two'];
+    priceRange = json['price_range'];
+    currency = json['currency'];
+    highlights = json['highlights']?.cast<String>();
+    opentableSupport = json['opentable_support'];
+    isZomatoBookRes = json['is_zomato_book_res'];
+    mezzoProvider = json['mezzo_provider'];
+    isBookFormWebView = json['is_book_form_web_view'];
+    bookFormWebViewUrl = json['book_form_web_view_url'];
+    bookAgainUrl = json['book_again_url'];
+    thumb = json['thumb'];
+    userRating = json['user_rating'] != null
+        ? new UserRating.fromJson(json['user_rating'])
+        : null;
+    allReviewsCount = json['all_reviews_count'];
+    photosUrl = json['photos_url'];
+    photoCount = json['photo_count'];
+    if (json['photos'] != null) {
+      photos = new List<Photo>();
+      json['photos'].forEach((p) {
+        photos.add(new Photo.fromJson(p));
+      });
+    }
+    menuUrl = json['menu_url'];
+    featuredImage = json['featured_image'];
+    hasOnlineDelivery = json['has_online_delivery'];
+    isDeliveringNow = json['is_delivering_now'];
+    includeBogoOffers = json['include_bogo_offers'];
+    deeplink = json['deeplink'];
+    isTableReservationSupported = json['is_table_reservation_supported'];
+    hasTableBooking = json['has_table_booking'];
+    eventsUrl = json['events_url'];
+    phoneNumbers = json['phone_numbers'];
+    if (json['all_reviews'] != null && json['all_reviews']['reviews'] != null) {
+      reviews = List<Review>();
+      for (var r in json['all_reviews']['reviews']) {
+        reviews.add(Review.fromJson(r));
+      }
+    }
+    establishment = json['establishment']?.cast<String>();
+  }
 }
 
-/// Sits within Restaurant object 
+/// Sits within Restaurant object
 /// Not mentioned in documentation.
 class R {
   HasMenuStatus hasMenuStatus;
@@ -456,7 +507,6 @@ class User {
   }
 }
 
-
 class Geocode {
   Location location;
   Popularity popularity;
@@ -476,7 +526,7 @@ class Geocode {
     if (json['nearby_restaurants'] != null) {
       nearbyRestaurants = new List<Restaurant>();
       json['nearby_restaurants'].forEach((v) {
-        nearbyRestaurants.add(new Restaurant.fromJson(v));
+        nearbyRestaurants.add(new Restaurant.fromListOfJson(v));
       });
     }
   }
