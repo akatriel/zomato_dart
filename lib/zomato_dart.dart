@@ -283,6 +283,40 @@ class ZomatoDart {
     return locationDetail;
   }
 
+  /// Returns similar information to [LocationDetail] based on coordinates
+  Future<Geocode> geocode(String latitude, String longitude) async {
+    Map<String, String> paramsMap = {
+      'lat': latitude,
+      'lon': longitude,
+    };
+    
+    if (latitude == null ||
+        latitude.isEmpty ||
+        longitude == null ||
+        longitude.isEmpty) {
+      throw (InvalidArgumentsException(
+          "Latitude and longitude must be provided"));
+    }
+
+    String endpoint = '/geocode';
+    String uri = _baseUri + endpoint;
+    http.Response response =
+        await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+    Geocode geocode;
+    try {
+      if (response.statusCode == 200) {
+        var json = convert.jsonDecode(response.body);
+        geocode = Geocode.fromJson(json);
+      } else {
+        _printBadResponse(response);
+      }
+    } catch (e) {
+      _printExceptionMessage(e, endpoint);
+    }
+
+    return geocode;
+  }
+
   void _validateLocationParameters(
       int cityId, String latitude, String longitude) {
     if (cityId == null) {

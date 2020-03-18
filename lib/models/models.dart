@@ -455,3 +455,64 @@ class User {
     profileImage = json['profile_image'];
   }
 }
+
+
+class Geocode {
+  Location location;
+  Popularity popularity;
+  String link;
+  List<Restaurant> nearbyRestaurants;
+
+  Geocode({this.location, this.popularity, this.link, this.nearbyRestaurants});
+
+  Geocode.fromJson(Map<String, dynamic> json) {
+    location = json['location'] != null
+        ? new Location.fromJson(json['location'])
+        : null;
+    popularity = json['popularity'] != null
+        ? new Popularity.fromJson(json['popularity'])
+        : null;
+    link = json['link'];
+    if (json['nearby_restaurants'] != null) {
+      nearbyRestaurants = new List<Restaurant>();
+      json['nearby_restaurants'].forEach((v) {
+        nearbyRestaurants.add(new Restaurant.fromJson(v));
+      });
+    }
+  }
+}
+
+class Popularity {
+  String popularity;
+  String nightlifeIndex;
+  List<String> nearbyRes;
+  List<String> topCuisines;
+  String popularityRes;
+  String nightlifeRes;
+  String subzone;
+  int subzoneId;
+  String city;
+
+  Popularity(
+      {this.popularity,
+      this.nightlifeIndex,
+      this.nearbyRes,
+      this.topCuisines,
+      this.popularityRes,
+      this.nightlifeRes,
+      this.subzone,
+      this.subzoneId,
+      this.city});
+
+  Popularity.fromJson(Map<String, dynamic> json) {
+    popularity = json['popularity'];
+    nightlifeIndex = json['nightlife_index'];
+    nearbyRes = json['nearby_res'].cast<String>();
+    topCuisines = json['top_cuisines'].cast<String>();
+    popularityRes = json['popularity_res'];
+    nightlifeRes = json['nightlife_res'];
+    subzone = json['subzone'];
+    subzoneId = json['subzone_id'];
+    city = json['city'];
+  }
+}
