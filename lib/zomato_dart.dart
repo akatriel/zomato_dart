@@ -47,7 +47,6 @@ class ZomatoDart {
 
   List<Category> _extractCategories(String body) {
     List<Category> categories = List<Category>();
-    try {
       var json = convert.jsonDecode(body);
       if (json != null && json.containsKey('categories')) {
         for (var cat in json['categories']) {
@@ -59,10 +58,6 @@ class ZomatoDart {
 
         print("Finished extracting categories from response");
       }
-    } catch (e) {
-      print("There was an error extracting categories from the response");
-      print(e);
-    }
 
     return categories;
   }
@@ -93,7 +88,6 @@ class ZomatoDart {
     var response = await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     cities = List<City>();
 
-    try {
       if (response.statusCode == 200) {
         var jsonDecoded = convert.jsonDecode(response.body);
         // _InternalLinkedHashMap<String, dynamic>
@@ -106,9 +100,6 @@ class ZomatoDart {
       } else {
         _printBadResponse(response);
       }
-    } catch (e) {
-      _printExceptionMessage(e, endpoint);
-    }
 
     return cities;
   }
@@ -133,7 +124,6 @@ class ZomatoDart {
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
 
     List<Collection> collections;
-    try {
       if (response.statusCode == 200) {
         collections = List<Collection>();
         var decodedJson = convert.jsonDecode(response.body);
@@ -144,9 +134,6 @@ class ZomatoDart {
       } else {
         _printBadResponse(response);
       }
-    } catch (e) {
-      _printExceptionMessage(e, endpoint);
-    }
 
     return collections;
   }
@@ -203,7 +190,6 @@ class ZomatoDart {
 
     List<Establishment> establishments;
 
-    try {
       if (response.statusCode == 200) {
         establishments = List<Establishment>();
         var decodedJson = convert.jsonDecode(response.body);
@@ -214,9 +200,6 @@ class ZomatoDart {
       } else {
         _printBadResponse(response);
       }
-    } catch (e) {
-      _printExceptionMessage(e, endpoint);
-    }
 
     return establishments;
   }
@@ -238,7 +221,6 @@ class ZomatoDart {
 
     List<Location> locations;
 
-    try {
       if (response.statusCode == 200) {
         locations = List<Location>();
         var decodedJson = convert.jsonDecode(response.body);
@@ -249,9 +231,6 @@ class ZomatoDart {
       } else {
         _printBadResponse(response);
       }
-    } catch (e) {
-      _printExceptionMessage(e, endpoint);
-    }
     return locations;
   }
 
@@ -269,16 +248,12 @@ class ZomatoDart {
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     LocationDetail locationDetail;
-    try {
       if (response.statusCode == 200) {
         var json = convert.jsonDecode(response.body);
         locationDetail = LocationDetail.fromJson(json);
       } else {
         _printBadResponse(response);
       }
-    } catch (e) {
-      _printExceptionMessage(e, endpoint);
-    }
 
     return locationDetail;
   }
@@ -303,16 +278,12 @@ class ZomatoDart {
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     Geocode geocode;
-    try {
       if (response.statusCode == 200) {
         var json = convert.jsonDecode(response.body);
         geocode = Geocode.fromJson(json);
       } else {
         _printBadResponse(response);
       }
-    } catch (e) {
-      _printExceptionMessage(e, endpoint);
-    }
 
     return geocode;
   }
@@ -333,18 +304,44 @@ class ZomatoDart {
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     Restaurant restaurant;
-    try {
       if (response.statusCode == 200) {
         var json = convert.jsonDecode(response.body);
         restaurant = Restaurant.fromJson(json);
       } else {
         _printBadResponse(response);
       }
-    } catch (e) {
-      _printExceptionMessage(e, endpoint);
-    }
 
     return restaurant;
+  }
+
+  /// Get restaurant reviews using the Zomato restaurant ID. 
+  /// Only 5 latest reviews are available under the Basic API plan.
+  /// [ReviewQuery] object returned which contains a list of reviews.
+  Future<ReviewQuery> reviews(String id, {int start, int count}) async {
+    Map<String, String> paramsMap = {
+      'res_id': id,
+      'start': start?.toString(),
+      'count': count?.toString()
+    };
+    
+    if (id == null || id.isEmpty) {
+      throw (InvalidArgumentsException(
+          "id must be provided"));
+    }
+
+    String endpoint = '/reviews';
+    String uri = _baseUri + endpoint;
+    http.Response response =
+        await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+    ReviewQuery reviewQuery;
+      if (response.statusCode == 200) {
+        var json = convert.jsonDecode(response.body);
+        reviewQuery = ReviewQuery.fromJson(json);
+      } else {
+        _printBadResponse(response);
+      }
+
+    return reviewQuery;
   }
 
   void _validateLocationParameters(

@@ -39,6 +39,11 @@ void main(List<String> args) async {
   // print(geocode.popularity.subzone);
   // print(geocode.nearbyRestaurants.first.id);
 
-  var restaurant = await ZomatoDart(userKey).restaurant("17016328");
-  print(restaurant.name);
+  // var restaurant = await ZomatoDart(userKey).restaurant("17016328");
+  // print(restaurant.name);
+
+  // var rq = await ZomatoDart(userKey).reviews("17016328");
+  var rq = await ZomatoDart(userKey).reviews("17016328", start: 3);
+  print(rq.reviewsShown);
+  print(rq.userReviews.first.reviewText);
 }

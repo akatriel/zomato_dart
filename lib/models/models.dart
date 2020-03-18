@@ -1,3 +1,4 @@
+// Move into their own files?
 class Category {
   int id;
   String name;
@@ -468,7 +469,7 @@ class Review {
   int commentsCount;
 
   Review.fromJson(Map<String, dynamic> json) {
-    rating = json['rating'];
+    rating = json['rating'].toDouble();
     reviewText = json['review_text'];
     id = json['id'];
     ratingColor = json['rating_color'];
@@ -476,8 +477,32 @@ class Review {
     ratingText = json['rating_text'];
     timestamp = json['timestamp'];
     likes = json['likes'];
-    user = json['user'];
+    user = User.fromJson(json['user'])  ;
     commentsCount = json['comments_count'];
+  }
+}
+
+/// Wrapper class for Reviews
+class ReviewQuery {
+  List<Review> userReviews;
+  /// max number of results to retrieve
+  int reviewsCount;
+  /// fetch results after this offset
+  int reviewsStart;
+  int reviewsShown;
+
+  ReviewQuery.fromJson(Map<String, dynamic> json) {
+    reviewsCount = json['reviews_count'];
+    reviewsStart = json["reviews_start"];
+    reviewsShown= json["reviews_shown"];
+    if (json['user_reviews'] != null) {
+      userReviews = List<Review>();
+      if (json['user_reviews'] != null) {
+        for(var r in json['user_reviews']) {
+          userReviews.add(Review.fromJson(r['review']));
+        }
+      }
+    }
   }
 }
 
