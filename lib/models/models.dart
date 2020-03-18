@@ -1,4 +1,6 @@
-// Move into their own files?
+// TODO: Move into their own files?
+// TODO: Should fail loudly?
+
 class Category {
   int id;
   String name;
@@ -209,6 +211,7 @@ class Restaurant {
   List<String> establishment;
   // ^^^^^Not in documention
 
+  // TODO: consolidate with fromJson
   Restaurant.fromListOfJson(Map<String, dynamic> json) {
     if (json['restaurant'] != null) {
       r = json['R'] != null ? R.fromJson(json['restaurant']['R']) : null;
@@ -317,6 +320,61 @@ class Restaurant {
       }
     }
     establishment = json['establishment']?.cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['url'] = this.url;
+    data['switch_to_order_menu'] = this.switchToOrderMenu;
+    data['cuisines'] = this.cuisines;
+    data['timings'] = this.timings;
+    data['average_cost_for_two'] = this.averageCostForTwo;
+    data['price_range'] = this.priceRange;
+    data['currency'] = this.currency;
+    data['highlights'] = this.highlights;
+    data['opentable_support'] = this.opentableSupport;
+    data['is_zomato_book_res'] = this.isZomatoBookRes;
+    data['mezzo_provider'] = this.mezzoProvider;
+    data['is_book_form_web_view'] = this.isBookFormWebView;
+    data['book_form_web_view_url'] = this.bookFormWebViewUrl;
+    data['book_again_url'] = this.bookAgainUrl;
+    data['thumb'] = this.thumb;
+    data['all_reviews_count'] = this.allReviewsCount;
+    data['photos_url'] = this.photosUrl;
+    data['photo_count'] = this.photoCount;
+    data['menu_url'] = this.menuUrl;
+    data['featured_image'] = this.featuredImage;
+    data['has_online_delivery'] = this.hasOnlineDelivery;
+    data['is_delivering_now'] = this.isDeliveringNow;
+    data['include_bogo_offers'] = this.includeBogoOffers;
+    data['deeplink'] = this.deeplink;
+    data['is_table_reservation_supported'] = this.isTableReservationSupported;
+    data['has_table_booking'] = this.hasTableBooking;
+    data['events_url'] = this.eventsUrl;
+    data['phone_numbers'] = this.phoneNumbers;
+    data['establishment'] = this.establishment;
+    return data;
+  }
+}
+
+class RestaurantSearch {
+  List<Restaurant> restaurants;
+  int resultsFound;
+  int resultsShown;
+  int resultsStart;
+
+  RestaurantSearch.fromJson(Map<String, dynamic> json) {
+    resultsFound = json['results_found'];
+    resultsShown = json['results_shown'];
+    resultsStart = json['results_start'];
+    if (json['restaurants'] != null) {
+      restaurants = List<Restaurant>();
+      for (var r in json['restaurants']) {
+        restaurants.add(Restaurant.fromListOfJson(r));
+      }
+    }
   }
 }
 
@@ -469,7 +527,7 @@ class Review {
   int commentsCount;
 
   Review.fromJson(Map<String, dynamic> json) {
-    rating = json['rating'].toDouble();
+    rating = json['rating']?.toDouble();
     reviewText = json['review_text'];
     id = json['id'];
     ratingColor = json['rating_color'];
@@ -477,7 +535,7 @@ class Review {
     ratingText = json['rating_text'];
     timestamp = json['timestamp'];
     likes = json['likes'];
-    user = User.fromJson(json['user'])  ;
+    user = User.fromJson(json['user']);
     commentsCount = json['comments_count'];
   }
 }
@@ -485,8 +543,10 @@ class Review {
 /// Wrapper class for Reviews
 class ReviewQuery {
   List<Review> userReviews;
+
   /// max number of results to retrieve
   int reviewsCount;
+
   /// fetch results after this offset
   int reviewsStart;
   int reviewsShown;
@@ -494,11 +554,11 @@ class ReviewQuery {
   ReviewQuery.fromJson(Map<String, dynamic> json) {
     reviewsCount = json['reviews_count'];
     reviewsStart = json["reviews_start"];
-    reviewsShown= json["reviews_shown"];
+    reviewsShown = json["reviews_shown"];
     if (json['user_reviews'] != null) {
       userReviews = List<Review>();
       if (json['user_reviews'] != null) {
-        for(var r in json['user_reviews']) {
+        for (var r in json['user_reviews']) {
           userReviews.add(Review.fromJson(r['review']));
         }
       }
@@ -521,14 +581,16 @@ class User {
   String profileImage;
 
   User.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    zomatoHandle = json['zomato_handle'];
-    foodieLevel = json['foodie_level'];
-    foodieLevelNum = json['foodie_level_num'];
-    foodieColor = json['foodie_color'];
-    profileUrl = json['profile_url'];
-    profileDeeplink = json['profile_deeplink'];
-    profileImage = json['profile_image'];
+    if (json != null) {
+      name = json['name'];
+      zomatoHandle = json['zomato_handle'];
+      foodieLevel = json['foodie_level'];
+      foodieLevelNum = json['foodie_level_num'];
+      foodieColor = json['foodie_color'];
+      profileUrl = json['profile_url'];
+      profileDeeplink = json['profile_deeplink'];
+      profileImage = json['profile_image'];
+    }
   }
 }
 

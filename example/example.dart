@@ -1,3 +1,4 @@
+import 'package:zomato_dart/models/models.dart';
 import 'package:zomato_dart/zomato_dart.dart';
 
 /// Command Line Sample
@@ -37,13 +38,26 @@ void main(List<String> args) async {
   // print(geocode.link);
   // print(geocode.location.cityName);
   // print(geocode.popularity.subzone);
-  // print(geocode.nearbyRestaurants.first.id);
+  // for (Restaurant res in geocode.nearbyRestaurants) {
+  //   print(res.id);
+  // }
 
   // var restaurant = await ZomatoDart(userKey).restaurant("17016328");
   // print(restaurant.name);
 
   // var rq = await ZomatoDart(userKey).reviews("17016328");
-  var rq = await ZomatoDart(userKey).reviews("17016328", start: 3);
-  print(rq.reviewsShown);
-  print(rq.userReviews.first.reviewText);
+  // var rq = await ZomatoDart(userKey).reviews("17016328", start: 3);
+  // print(rq.reviewsShown);
+  // print(rq.userReviews.first.reviewText);
+
+  var rs = await ZomatoDart(userKey).restaurantSearch(
+    latitude: '39.973609',
+    longitude: '-75.128669',
+  );
+
+  print('Found: ${rs.resultsFound}');
+  print('Shown: ${rs.resultsShown}');
+  print('Start: ${rs.resultsStart}');
+  print('Wrapper length: ${rs.restaurants.length}'); 
+  print(rs.restaurants.map((r) => r.toJson()));
 }

@@ -47,17 +47,17 @@ class ZomatoDart {
 
   List<Category> _extractCategories(String body) {
     List<Category> categories = List<Category>();
-      var json = convert.jsonDecode(body);
-      if (json != null && json.containsKey('categories')) {
-        for (var cat in json['categories']) {
-          var innerCat = cat['categories'];
-          if (innerCat != null) {
-            categories.add(Category.fromJson(innerCat));
-          }
+    var json = convert.jsonDecode(body);
+    if (json != null && json.containsKey('categories')) {
+      for (var cat in json['categories']) {
+        var innerCat = cat['categories'];
+        if (innerCat != null) {
+          categories.add(Category.fromJson(innerCat));
         }
-
-        print("Finished extracting categories from response");
       }
+
+      print("Finished extracting categories from response");
+    }
 
     return categories;
   }
@@ -88,18 +88,18 @@ class ZomatoDart {
     var response = await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     cities = List<City>();
 
-      if (response.statusCode == 200) {
-        var jsonDecoded = convert.jsonDecode(response.body);
-        // _InternalLinkedHashMap<String, dynamic>
-        // print(jsonDecoded.runtimeType);
-        if (jsonDecoded['location_suggestions'] != null) {
-          for (var c in jsonDecoded['location_suggestions']) {
-            cities.add(City.fromJson(c));
-          }
+    if (response.statusCode == 200) {
+      var jsonDecoded = convert.jsonDecode(response.body);
+      // _InternalLinkedHashMap<String, dynamic>
+      // print(jsonDecoded.runtimeType);
+      if (jsonDecoded['location_suggestions'] != null) {
+        for (var c in jsonDecoded['location_suggestions']) {
+          cities.add(City.fromJson(c));
         }
-      } else {
-        _printBadResponse(response);
       }
+    } else {
+      _printBadResponse(response);
+    }
 
     return cities;
   }
@@ -124,16 +124,16 @@ class ZomatoDart {
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
 
     List<Collection> collections;
-      if (response.statusCode == 200) {
-        collections = List<Collection>();
-        var decodedJson = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      collections = List<Collection>();
+      var decodedJson = convert.jsonDecode(response.body);
 
-        for (var c in decodedJson['collections']) {
-          collections.add(Collection.fromJson(c['collection']));
-        }
-      } else {
-        _printBadResponse(response);
+      for (var c in decodedJson['collections']) {
+        collections.add(Collection.fromJson(c['collection']));
       }
+    } else {
+      _printBadResponse(response);
+    }
 
     return collections;
   }
@@ -190,16 +190,16 @@ class ZomatoDart {
 
     List<Establishment> establishments;
 
-      if (response.statusCode == 200) {
-        establishments = List<Establishment>();
-        var decodedJson = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      establishments = List<Establishment>();
+      var decodedJson = convert.jsonDecode(response.body);
 
-        for (var c in decodedJson['establishments']) {
-          establishments.add(Establishment.fromJson(c['establishment']));
-        }
-      } else {
-        _printBadResponse(response);
+      for (var c in decodedJson['establishments']) {
+        establishments.add(Establishment.fromJson(c['establishment']));
       }
+    } else {
+      _printBadResponse(response);
+    }
 
     return establishments;
   }
@@ -221,16 +221,16 @@ class ZomatoDart {
 
     List<Location> locations;
 
-      if (response.statusCode == 200) {
-        locations = List<Location>();
-        var decodedJson = convert.jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      locations = List<Location>();
+      var decodedJson = convert.jsonDecode(response.body);
 
-        for (var c in decodedJson['location_suggestions']) {
-          locations.add(Location.fromJson(c));
-        }
-      } else {
-        _printBadResponse(response);
+      for (var c in decodedJson['location_suggestions']) {
+        locations.add(Location.fromJson(c));
       }
+    } else {
+      _printBadResponse(response);
+    }
     return locations;
   }
 
@@ -248,12 +248,12 @@ class ZomatoDart {
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     LocationDetail locationDetail;
-      if (response.statusCode == 200) {
-        var json = convert.jsonDecode(response.body);
-        locationDetail = LocationDetail.fromJson(json);
-      } else {
-        _printBadResponse(response);
-      }
+    if (response.statusCode == 200) {
+      var json = convert.jsonDecode(response.body);
+      locationDetail = LocationDetail.fromJson(json);
+    } else {
+      _printBadResponse(response);
+    }
 
     return locationDetail;
   }
@@ -264,7 +264,7 @@ class ZomatoDart {
       'lat': latitude,
       'lon': longitude,
     };
-    
+
     if (latitude == null ||
         latitude.isEmpty ||
         longitude == null ||
@@ -278,25 +278,22 @@ class ZomatoDart {
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     Geocode geocode;
-      if (response.statusCode == 200) {
-        var json = convert.jsonDecode(response.body);
-        geocode = Geocode.fromJson(json);
-      } else {
-        _printBadResponse(response);
-      }
+    if (response.statusCode == 200) {
+      var json = convert.jsonDecode(response.body);
+      geocode = Geocode.fromJson(json);
+    } else {
+      _printBadResponse(response);
+    }
 
     return geocode;
   }
 
   /// returns a single restaurant based on a provided id
   Future<Restaurant> restaurant(String id) async {
-    Map<String, String> paramsMap = {
-      'res_id': id
-    };
-    
+    Map<String, String> paramsMap = {'res_id': id};
+
     if (id == null || id.isEmpty) {
-      throw (InvalidArgumentsException(
-          "id must be provided"));
+      throw (InvalidArgumentsException("id must be provided"));
     }
 
     String endpoint = '/restaurant';
@@ -304,29 +301,29 @@ class ZomatoDart {
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     Restaurant restaurant;
-      if (response.statusCode == 200) {
-        var json = convert.jsonDecode(response.body);
-        restaurant = Restaurant.fromJson(json);
-      } else {
-        _printBadResponse(response);
-      }
+    if (response.statusCode == 200) {
+      var json = convert.jsonDecode(response.body);
+      restaurant = Restaurant.fromJson(json);
+    } else {
+      _printBadResponse(response);
+    }
 
     return restaurant;
   }
 
-  /// Get restaurant reviews using the Zomato restaurant ID. 
+  // TODO: add method helper to retrieve next batch
+  /// Get restaurant reviews using the Zomato restaurant ID.
   /// Only 5 latest reviews are available under the Basic API plan.
   /// [ReviewQuery] object returned which contains a list of reviews.
-  Future<ReviewQuery> reviews(String id, {int start, int count}) async {
+  Future<ReviewQuery> reviews(String resId, {int start, int count}) async {
     Map<String, String> paramsMap = {
-      'res_id': id,
+      'res_id': resId,
       'start': start?.toString(),
       'count': count?.toString()
     };
-    
-    if (id == null || id.isEmpty) {
-      throw (InvalidArgumentsException(
-          "id must be provided"));
+
+    if (resId == null || resId.isEmpty) {
+      throw (InvalidArgumentsException("id must be provided"));
     }
 
     String endpoint = '/reviews';
@@ -334,14 +331,80 @@ class ZomatoDart {
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
     ReviewQuery reviewQuery;
-      if (response.statusCode == 200) {
-        var json = convert.jsonDecode(response.body);
-        reviewQuery = ReviewQuery.fromJson(json);
-      } else {
-        _printBadResponse(response);
-      }
+    if (response.statusCode == 200) {
+      var json = convert.jsonDecode(response.body);
+      reviewQuery = ReviewQuery.fromJson(json);
+    } else {
+      _printBadResponse(response);
+    }
 
     return reviewQuery;
+  }
+
+  /// The location input can be specified using Zomato location ID or coordinates.
+  /// Cuisine / Establishment / Collection IDs can be obtained from respective api
+  /// calls. 
+  /// 
+  /// Get up to 100 restaurants by changing the 'start' and 'count'
+  /// parameters with the maximum value of count being 20.
+  /// 
+  /// Partner Access is required to access photos and reviews.
+  ///
+  /// [count] is 20 by default
+  /// 
+  /// [latitude] and [longitude] must be provided together
+  /// 
+  /// All parameters are optional.
+  Future<RestaurantSearch> restaurantSearch({
+    int entity_id,
+    EntityType entityType,
+    String query,
+    int start,
+    int count,
+    String latitude,
+    String longitude,
+    // meters
+    int radius,
+    // csv form
+    String cuisines,
+    // estblishment id obtained from establishments call
+    int establishmentType,
+    int collectionId,
+    int categoryId,
+    Sort sort,
+    Order order
+    }) async {
+
+    Map<String, String> paramsMap = {
+      'entity_id': entity_id?.toString(),
+      'entity_type': entityType?.toString(),
+      'q': query,
+      'start': start?.toString(),
+      'lat': latitude,
+      'lon': longitude,
+      'radius': radius?.toString(),
+      'cuisines': cuisines,
+      'establishment_type': establishmentType?.toString(),
+      'collection_id': collectionId?.toString(),
+      'category_id': categoryId?.toString(),
+      'sort': sort?.toString(),
+      'order': order?.toString()
+    };
+
+    String endpoint = '/search';
+    String uri = _baseUri + endpoint;
+    http.Response response =
+        await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+
+    RestaurantSearch rs;
+    if (response.statusCode == 200) {
+      var json = convert.jsonDecode(response.body);
+      rs = RestaurantSearch.fromJson(json);
+    } else {
+      _printBadResponse(response);
+    }
+
+    return rs;
   }
 
   void _validateLocationParameters(
@@ -404,6 +467,26 @@ class ZomatoDart {
     }
     return params;
   }
+}
+
+enum EntityType {
+  city,
+  subzone,
+  zone,
+  landmark,
+  metro,
+  group
+}
+
+enum Sort {
+  cost,
+  rating,
+  real_distance
+}
+
+enum Order {
+  asc,
+  desc
 }
 
 class InvalidArgumentsException implements Exception {
