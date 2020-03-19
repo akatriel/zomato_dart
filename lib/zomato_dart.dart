@@ -330,6 +330,7 @@ class ZomatoDart {
     String uri = _baseUri + endpoint;
     http.Response response =
         await _sendRequest(uri, endpoint, paramsMap: paramsMap);
+
     ReviewQuery reviewQuery;
     if (response.statusCode == 200) {
       var json = convert.jsonDecode(response.body);
