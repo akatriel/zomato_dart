@@ -35,14 +35,14 @@ void main(List<String> args) async {
   // print(locationdetail.bestRatedRestaurants.first.photos.first.user.name);
   // print(locationdetail.bestRatedRestaurants.first.toJson());
 
-  var geocode = await ZomatoDart(userKey).geocode("39.973609", "-75.128669");
-  print(geocode.link);
-  print(geocode.location.cityName);
-  print(geocode.popularity.subzone);
-  for (Restaurant res in geocode.nearbyRestaurants) {
-    print(res.id);
-  }
-  print(geocode.nearbyRestaurants.first.toJson());
+  // var geocode = await ZomatoDart(userKey).geocode("39.973609", "-75.128669");
+  // print(geocode.link);
+  // print(geocode.location.cityName);
+  // print(geocode.popularity.subzone);
+  // for (Restaurant res in geocode.nearbyRestaurants) {
+  //   print(res.id);
+  // }
+  // print(geocode.nearbyRestaurants.first.toJson());
 
   // var restaurant = await ZomatoDart(userKey).restaurant("17016328");
   // print(restaurant.name);
@@ -62,4 +62,8 @@ void main(List<String> args) async {
   // print('Start: ${rs.resultsStart}');
   // print('Restaurant list length: ${rs.restaurants.length}'); 
   // print(rs.restaurants.map((r) => r.toJson()));
+
+  var dms = await ZomatoDart(userKey).dailyMenus("16507624");
+  print(dms?.first?.dailyMenuId);
+  print(dms?.first?.dishes?.last?.name);
 }

@@ -74,7 +74,6 @@ class ZomatoDart {
       String longitude,
       List<int> cityIds,
       int count}) async {
-
     Map<String, String> paramsMap = {
       'q': cityName,
       'lon': longitude,
@@ -84,7 +83,7 @@ class ZomatoDart {
     };
 
     var response = await _fetchResponse('/cities', paramsMap: paramsMap);
-    
+
     List<City> cities;
     if (response?.statusCode == 200) {
       cities = List<City>();
@@ -388,6 +387,33 @@ class ZomatoDart {
     return rs;
   }
 
+  // Sometimes daily_menu_id works instead of res_id...
+  /// [res_id] required
+  Future<List<DailyMenu>> dailyMenus(String res_id) async {
+    if (res_id == null || res_id.isEmpty) {
+      throw InvalidArgumentsException("res_id must be provided");
+    }
+
+    Map<String, String> paramsMap = {'res_id': res_id};
+
+    http.Response response =
+        (await _fetchResponse('/dailymenu', paramsMap: paramsMap));
+
+    List<DailyMenu> dms;
+    if (response?.statusCode == 200) {
+      dms = List<DailyMenu>();
+      var json = convert.jsonDecode(response.body);
+      if (json['daily_menus'] != null) {
+        for (var dmJsonWrapper in json['daily_menus']) {
+          if (dmJsonWrapper['daily_menu'] != null) {
+            dms.add(DailyMenu.fromJson(dmJsonWrapper['daily_menu']));
+          }
+        }
+      }
+    }
+    return dms;
+  }
+
   void _validateLocationParameters(
       int cityId, String latitude, String longitude) {
     if (cityId == null) {
@@ -408,7 +434,6 @@ class ZomatoDart {
 
   Future<http.Response> _fetchResponse(String endpoint,
       {Map<String, String> paramsMap, Map<String, String> headersMap}) async {
-
     print("Fetching response from Zomato API for endpoint: $endpoint");
     http.Response response;
 
@@ -418,6 +443,8 @@ class ZomatoDart {
 
       // TODO: encode url before sending?
       response = await _client.get(url, headers: _headersMap);
+      print('Status Code: ${response?.statusCode}');
+
       _client?.close();
     } catch (e) {
       print(e);

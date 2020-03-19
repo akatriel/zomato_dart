@@ -16,3 +16,4 @@ part 'review_query.dart';
 part 'review.dart';
 part 'user_rating.dart';
 part 'user.dart';
+part 'dailymenu.dart';
