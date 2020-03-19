@@ -343,38 +343,36 @@ class ZomatoDart {
 
   /// The location input can be specified using Zomato location ID or coordinates.
   /// Cuisine / Establishment / Collection IDs can be obtained from respective api
-  /// calls. 
-  /// 
+  /// calls.
+  ///
   /// Get up to 100 restaurants by changing the 'start' and 'count'
   /// parameters with the maximum value of count being 20.
-  /// 
+  ///
   /// Partner Access is required to access photos and reviews.
   ///
   /// [count] is 20 by default
-  /// 
+  ///
   /// [latitude] and [longitude] must be provided together
-  /// 
+  ///
   /// All parameters are optional.
-  Future<RestaurantSearch> restaurantSearch({
-    int entity_id,
-    EntityType entityType,
-    String query,
-    int start,
-    int count,
-    String latitude,
-    String longitude,
-    // meters
-    int radius,
-    // csv form
-    String cuisines,
-    // estblishment id obtained from establishments call
-    int establishmentType,
-    int collectionId,
-    int categoryId,
-    Sort sort,
-    Order order
-    }) async {
-
+  Future<RestaurantSearch> restaurantSearch(
+      {int entity_id,
+      EntityType entityType,
+      String query,
+      int start,
+      int count,
+      String latitude,
+      String longitude,
+      // meters
+      int radius,
+      // csv form
+      String cuisines,
+      // estblishment id obtained from establishments call
+      int establishmentType,
+      int collectionId,
+      int categoryId,
+      Sort sort,
+      Order order}) async {
     Map<String, String> paramsMap = {
       'entity_id': entity_id?.toString(),
       'entity_type': entityType?.toString(),
@@ -469,25 +467,11 @@ class ZomatoDart {
   }
 }
 
-enum EntityType {
-  city,
-  subzone,
-  zone,
-  landmark,
-  metro,
-  group
-}
+enum EntityType { city, subzone, zone, landmark, metro, group }
 
-enum Sort {
-  cost,
-  rating,
-  real_distance
-}
+enum Sort { cost, rating, real_distance }
 
-enum Order {
-  asc,
-  desc
-}
+enum Order { asc, desc }
 
 class InvalidArgumentsException implements Exception {
   String message;

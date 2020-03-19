@@ -33,14 +33,16 @@ void main(List<String> args) async {
   // print(locationdetail.bestRatedRestaurants.first.location.localityVerbose);
   // print(locationdetail.bestRatedRestaurants.first.photos.first.url);
   // print(locationdetail.bestRatedRestaurants.first.photos.first.user.name);
+  // print(locationdetail.bestRatedRestaurants.first.toJson());
 
-  // var geocode = await ZomatoDart(userKey).geocode("39.973609", "-75.128669");
-  // print(geocode.link);
-  // print(geocode.location.cityName);
-  // print(geocode.popularity.subzone);
-  // for (Restaurant res in geocode.nearbyRestaurants) {
-  //   print(res.id);
-  // }
+  var geocode = await ZomatoDart(userKey).geocode("39.973609", "-75.128669");
+  print(geocode.link);
+  print(geocode.location.cityName);
+  print(geocode.popularity.subzone);
+  for (Restaurant res in geocode.nearbyRestaurants) {
+    print(res.id);
+  }
+  print(geocode.nearbyRestaurants.first.toJson());
 
   // var restaurant = await ZomatoDart(userKey).restaurant("17016328");
   // print(restaurant.name);
@@ -50,14 +52,14 @@ void main(List<String> args) async {
   // print(rq.reviewsShown);
   // print(rq.userReviews.first.reviewText);
 
-  var rs = await ZomatoDart(userKey).restaurantSearch(
-    latitude: '39.973609',
-    longitude: '-75.128669',
-  );
+  // var rs = await ZomatoDart(userKey).restaurantSearch(
+  //   latitude: '39.973609',
+  //   longitude: '-75.128669',
+  // );
 
-  print('Found: ${rs.resultsFound}');
-  print('Shown: ${rs.resultsShown}');
-  print('Start: ${rs.resultsStart}');
-  print('Wrapper length: ${rs.restaurants.length}'); 
-  print(rs.restaurants.map((r) => r.toJson()));
+  // print('Found: ${rs.resultsFound}');
+  // print('Shown: ${rs.resultsShown}');
+  // print('Start: ${rs.resultsStart}');
+  // print('Restaurant list length: ${rs.restaurants.length}'); 
+  // print(rs.restaurants.map((r) => r.toJson()));
 }

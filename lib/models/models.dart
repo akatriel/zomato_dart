@@ -145,9 +145,12 @@ class LocationDetail {
     numRestaurant = json['num_restaurant'];
     if (json['best_rated_restaurant'] != null) {
       bestRatedRestaurants = new List<Restaurant>();
-      json['best_rated_restaurant'].forEach((v) {
-        bestRatedRestaurants.add(new Restaurant.fromListOfJson(v));
-      });
+      for (var restaurantWrapper in json['best_rated_restaurant']) {
+        if (restaurantWrapper['restaurant'] != null) {
+          bestRatedRestaurants
+              .add(Restaurant.fromJson(restaurantWrapper['restaurant']));
+        }
+      }
     }
   }
 }
@@ -210,64 +213,6 @@ class Restaurant {
   int isTableReservationSupported;
   List<String> establishment;
   // ^^^^^Not in documention
-
-  // TODO: consolidate with fromJson
-  Restaurant.fromListOfJson(Map<String, dynamic> json) {
-    if (json['restaurant'] != null) {
-      r = json['R'] != null ? R.fromJson(json['restaurant']['R']) : null;
-      id = json['restaurant']['id'];
-      name = json['restaurant']['name'];
-      url = json['restaurant']['url'];
-      location = json['restaurant']['location'] != null
-          ? ResLocation.fromJson(json['restaurant']['location'])
-          : null;
-      switchToOrderMenu = json['restaurant']['switch_to_order_menu'];
-      cuisines = json['restaurant']['cuisines'];
-      timings = json['restaurant']['timings'];
-      averageCostForTwo = json['restaurant']['average_cost_for_two'];
-      priceRange = json['restaurant']['price_range'];
-      currency = json['restaurant']['currency'];
-      highlights = json['restaurant']['highlights']?.cast<String>();
-      opentableSupport = json['restaurant']['opentable_support'];
-      isZomatoBookRes = json['restaurant']['is_zomato_book_res'];
-      mezzoProvider = json['restaurant']['mezzo_provider'];
-      isBookFormWebView = json['restaurant']['is_book_form_web_view'];
-      bookFormWebViewUrl = json['restaurant']['book_form_web_view_url'];
-      bookAgainUrl = json['restaurant']['book_again_url'];
-      thumb = json['restaurant']['thumb'];
-      userRating = json['restaurant']['user_rating'] != null
-          ? new UserRating.fromJson(json['restaurant']['user_rating'])
-          : null;
-      allReviewsCount = json['restaurant']['all_reviews_count'];
-      photosUrl = json['restaurant']['photos_url'];
-      photoCount = json['restaurant']['photo_count'];
-      if (json['restaurant']['photos'] != null) {
-        photos = new List<Photo>();
-        json['restaurant']['photos'].forEach((p) {
-          photos.add(new Photo.fromJson(p));
-        });
-      }
-      menuUrl = json['restaurant']['menu_url'];
-      featuredImage = json['restaurant']['featured_image'];
-      hasOnlineDelivery = json['restaurant']['has_online_delivery'];
-      isDeliveringNow = json['restaurant']['is_delivering_now'];
-      includeBogoOffers = json['restaurant']['include_bogo_offers'];
-      deeplink = json['restaurant']['deeplink'];
-      isTableReservationSupported =
-          json['restaurant']['is_table_reservation_supported'];
-      hasTableBooking = json['restaurant']['has_table_booking'];
-      eventsUrl = json['restaurant']['events_url'];
-      phoneNumbers = json['restaurant']['phone_numbers'];
-      if (json['restaurant']['all_reviews'] != null &&
-          json['restaurant']['all_reviews']['reviews'] != null) {
-        reviews = List<Review>();
-        for (var r in json['restaurant']['all_reviews']['reviews']) {
-          reviews.add(Review.fromJson(r));
-        }
-      }
-      establishment = json['restaurant']['establishment']?.cast<String>();
-    }
-  }
 
   Restaurant.fromJson(Map<String, dynamic> json) {
     r = json['R'] != null ? R.fromJson(json['R']) : null;
@@ -371,8 +316,10 @@ class RestaurantSearch {
     resultsStart = json['results_start'];
     if (json['restaurants'] != null) {
       restaurants = List<Restaurant>();
-      for (var r in json['restaurants']) {
-        restaurants.add(Restaurant.fromListOfJson(r));
+      for (var restaurantWrapper in json['restaurants']) {
+        if (restaurantWrapper['restaurant'] != null) {
+          restaurants.add(Restaurant.fromJson(restaurantWrapper['restaurant']));
+        }
       }
     }
   }
@@ -612,9 +559,12 @@ class Geocode {
     link = json['link'];
     if (json['nearby_restaurants'] != null) {
       nearbyRestaurants = new List<Restaurant>();
-      json['nearby_restaurants'].forEach((v) {
-        nearbyRestaurants.add(new Restaurant.fromListOfJson(v));
-      });
+      for (var restaurantWrapper in json['nearby_restaurants']) {
+        if (restaurantWrapper['restaurant'] != null) {
+          nearbyRestaurants
+              .add(new Restaurant.fromJson(restaurantWrapper['restaurant']));
+        }
+      }
     }
   }
 }
