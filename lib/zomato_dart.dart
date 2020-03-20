@@ -24,7 +24,7 @@ class ZomatoDart {
   Map<String, String> _headersMap;
 
   // TODO: complete logging
-  ZomatoDart(this._userKey, {bool json = true, bool logging = true}) {
+  ZomatoDart(this._userKey, {bool json = true}) {
     if (_userKey == null || _userKey == '') {
       throw (InvalidArgumentsException('user-key not provided'));
     }
@@ -60,8 +60,6 @@ class ZomatoDart {
           categories.add(Category.fromJson(innerCat));
         }
       }
-
-      print("Finished extracting categories from response");
     }
 
     return categories;

@@ -4,7 +4,7 @@ https://developers.zomato.com/api
 
 ## Usage:
 A user key must be provided to initialize the ZomatoDart object.
-Convenience methods are used to await Futures of the corresponding model:
+Convenience methods are used to fetch responses and await Futures of the corresponding model:
 <pre>
 await ZomatoDart(<i>userKey</i>).<i>convenienceMethod</i>()
 </pre>
