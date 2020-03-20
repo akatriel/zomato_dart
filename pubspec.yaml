@@ -1,6 +1,6 @@
 name: zomato_dart
 description: "A wrapper for the Zomato API that exposes dart objects."
-homepage: https://github.com/akatriel/ZomatoDart
+homepage: https://github.com/akatriel/zomato_dart
 version: 1.0.0
 environment:
   sdk: ">=1.8.0 <2.0.0"
