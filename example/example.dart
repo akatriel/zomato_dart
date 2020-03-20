@@ -1,4 +1,3 @@
-import 'package:zomato_dart/models/models.dart';
 import 'package:zomato_dart/zomato_dart.dart';
 
 /// Command Line Sample

@@ -8,6 +8,7 @@ enum Sort { cost, rating, real_distance }
 
 enum Order { asc, desc }
 
+// Add note to use compute with flutter in docs
 /// An API wrapper in Dart for the Zomato API.
 /// See https://developers.zomato.com/documentation
 /// for details about the API.
