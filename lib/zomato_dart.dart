@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:zomato_dart/models/models.dart';
