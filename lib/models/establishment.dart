@@ -1,4 +1,5 @@
 part of models;
+
 class Establishment {
   int id;
   String name;

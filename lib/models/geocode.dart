@@ -9,19 +9,18 @@ class Geocode {
   Geocode({this.location, this.popularity, this.link, this.nearbyRestaurants});
 
   Geocode.fromJson(Map<String, dynamic> json) {
-    location = json['location'] != null
-        ? new Location.fromJson(json['location'])
-        : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
     popularity = json['popularity'] != null
-        ? new Popularity.fromJson(json['popularity'])
+        ? Popularity.fromJson(json['popularity'])
         : null;
     link = json['link'];
     if (json['nearby_restaurants'] != null) {
-      nearbyRestaurants = new List<Restaurant>();
+      nearbyRestaurants = List<Restaurant>();
       for (var restaurantWrapper in json['nearby_restaurants']) {
         if (restaurantWrapper['restaurant'] != null) {
           nearbyRestaurants
-              .add(new Restaurant.fromJson(restaurantWrapper['restaurant']));
+              .add(Restaurant.fromJson(restaurantWrapper['restaurant']));
         }
       }
     }

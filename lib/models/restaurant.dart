@@ -82,15 +82,15 @@ class Restaurant {
     bookAgainUrl = json['book_again_url'];
     thumb = json['thumb'];
     userRating = json['user_rating'] != null
-        ? new UserRating.fromJson(json['user_rating'])
+        ? UserRating.fromJson(json['user_rating'])
         : null;
     allReviewsCount = json['all_reviews_count'];
     photosUrl = json['photos_url'];
     photoCount = json['photo_count'];
     if (json['photos'] != null) {
-      photos = new List<Photo>();
+      photos = List<Photo>();
       json['photos'].forEach((p) {
-        photos.add(new Photo.fromJson(p));
+        photos.add(Photo.fromJson(p));
       });
     }
     menuUrl = json['menu_url'];
@@ -113,7 +113,7 @@ class Restaurant {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['name'] = this.name;
     data['url'] = this.url;
@@ -180,7 +180,7 @@ class R {
 
   R.fromJson(Map<String, dynamic> json) {
     hasMenuStatus = json['has_menu_status'] != null
-        ? new HasMenuStatus.fromJson(json['has_menu_status'])
+        ? HasMenuStatus.fromJson(json['has_menu_status'])
         : null;
     resId = json['res_id'];
   }

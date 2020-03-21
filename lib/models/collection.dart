@@ -1,4 +1,5 @@
 part of models;
+
 class Collection {
   int id;
   int resCount;

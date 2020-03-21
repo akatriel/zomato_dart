@@ -1,4 +1,5 @@
 part of models;
+
 class Popularity {
   String popularity;
   String nightlifeIndex;

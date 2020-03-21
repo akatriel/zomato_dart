@@ -1,4 +1,5 @@
 part of models;
+
 class Location {
   /// city, zone, subzone, landmark, group, metro, street
   String entityType;

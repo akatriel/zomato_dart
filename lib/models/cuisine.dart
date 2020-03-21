@@ -1,4 +1,5 @@
 part of models;
+
 class Cuisine {
   int cuisineId;
   String cuisineName;

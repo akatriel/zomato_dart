@@ -39,12 +39,11 @@ class LocationDetail {
     subzone = json['subzone'];
     subzoneId = json['subzone_id'];
     city = json['city'];
-    location = json['location'] != null
-        ? new Location.fromJson(json['location'])
-        : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
     numRestaurant = json['num_restaurant'];
     if (json['best_rated_restaurant'] != null) {
-      bestRatedRestaurants = new List<Restaurant>();
+      bestRatedRestaurants = List<Restaurant>();
       for (var restaurantWrapper in json['best_rated_restaurant']) {
         if (restaurantWrapper['restaurant'] != null) {
           bestRatedRestaurants

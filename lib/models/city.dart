@@ -1,4 +1,5 @@
 part of models;
+
 class City {
   int id;
   String name;

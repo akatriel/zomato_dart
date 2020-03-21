@@ -24,7 +24,6 @@ class ZomatoDart {
   /// Map for headers
   Map<String, String> _headersMap;
 
-  // TODO: complete logging
   ZomatoDart(this._userKey, {bool json = true}) {
     if (_userKey == null || _userKey == '') {
       throw (InvalidArgumentsException('user-key not provided'));

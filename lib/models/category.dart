@@ -1,4 +1,5 @@
 part of models;
+
 class Category {
   int id;
   String name;
