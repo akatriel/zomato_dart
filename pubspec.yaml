@@ -1,7 +1,7 @@
 name: zomato_dart
 description: "A wrapper for the Zomato API that exposes dart objects. The various endpoints of the API can be accessed through convenience methods that return a Future."
 homepage: https://github.com/akatriel/zomato_dart
-version: 1.0.2
+version: 1.0.3
 environment:
   sdk: ">=1.8.0 <3.0.0"
 dependencies:
