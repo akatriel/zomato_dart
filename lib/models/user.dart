@@ -14,6 +14,17 @@ class User {
   String profileDeeplink;
   String profileImage;
 
+  User({
+    this.name,
+    this.zomatoHandle,
+    this.foodieLevel,
+    this.foodieLevelNum,
+    this.foodieColor,
+    this.profileUrl,
+    this.profileDeeplink,
+    this.profileImage,
+  });
+
   User.fromJson(Map<String, dynamic> json) {
     if (json != null) {
       name = json['name'];

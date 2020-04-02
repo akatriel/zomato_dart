@@ -11,6 +11,13 @@ class ReviewQuery {
   int reviewsStart;
   int reviewsShown;
 
+  ReviewQuery({
+    this.userReviews,
+    this.reviewsCount,
+    this.reviewsShown,
+    this.reviewsStart,
+  });
+
   ReviewQuery.fromJson(Map<String, dynamic> json) {
     reviewsCount = json['reviews_count'];
     reviewsStart = json["reviews_start"];

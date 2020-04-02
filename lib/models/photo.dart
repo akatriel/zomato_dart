@@ -24,6 +24,21 @@ class Photo {
   int commentsCount;
   int likesCount;
 
+  Photo({
+    this.id,
+    this.url,
+    this.thumbUrl,
+    this.user,
+    this.resId,
+    this.caption,
+    this.timestamp,
+    this.friendlyTime,
+    this.width,
+    this.height,
+    this.commentsCount,
+    this.likesCount,
+  });
+
   Photo.fromJson(Map<String, dynamic> json) {
     if (json != null && json['photo'] != null) {
       id = json['photo']['id'];

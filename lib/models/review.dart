@@ -18,6 +18,19 @@ class Review {
   User user;
   int commentsCount;
 
+  Review({
+    this.rating,
+    this.reviewText,
+    this.id,
+    this.ratingColor,
+    this.reviewTimeFriendly,
+    this.ratingText,
+    this.timestamp,
+    this.likes,
+    this.user,
+    this.commentsCount,
+  });
+
   Review.fromJson(Map<String, dynamic> json) {
     rating = json['rating']?.toDouble();
     reviewText = json['review_text'];

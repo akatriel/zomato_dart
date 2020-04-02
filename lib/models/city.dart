@@ -9,6 +9,7 @@ class City {
   int stateId;
   String stateName;
   String stateCode;
+  
   City(this.id, this.name, this.countryId, this.countryName, this.isState,
       this.stateId, this.stateName, this.stateCode);
 

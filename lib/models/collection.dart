@@ -9,6 +9,16 @@ class Collection {
   String description;
   String shareUrl;
 
+  Collection({
+    this.id,
+    this.resCount,
+    this.imageUrl,
+    this.url,
+    this.title,
+    this.description,
+    this.shareUrl,
+  });
+
   Collection.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     resCount = json['res_count'];

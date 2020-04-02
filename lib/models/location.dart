@@ -12,6 +12,18 @@ class Location {
   int countryId;
   String countryName;
 
+  Location({
+    this.entityType,
+    this.entityId,
+    this.title,
+    this.latitude,
+    this.longitude,
+    this.cityId,
+    this.cityName,
+    this.countryId,
+    this.countryName,
+  });
+
   Location.fromJson(Map<String, dynamic> json) {
     entityType = json['entity_type'];
     entityId = json['entity_id'];

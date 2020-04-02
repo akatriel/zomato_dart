@@ -59,6 +59,45 @@ class Restaurant {
   List<String> establishment;
   // ^^^^^Not in documention
 
+  Restaurant(
+    this.id, {
+    this.name,
+    this.url,
+    this.location,
+    this.averageCostForTwo,
+    this.priceRange,
+    this.currency,
+    this.thumb,
+    this.featuredImage,
+    this.photosUrl,
+    this.menuUrl,
+    this.eventsUrl,
+    this.userRating,
+    this.hasOnlineDelivery,
+    this.isDeliveringNow,
+    this.hasTableBooking,
+    this.deeplink,
+    this.cuisines,
+    this.allReviewsCount,
+    this.photoCount,
+    this.phoneNumbers,
+    this.photos,
+    this.reviews,
+    this.r,
+    this.switchToOrderMenu,
+    this.timings,
+    this.highlights,
+    this.opentableSupport,
+    this.isZomatoBookRes,
+    this.mezzoProvider,
+    this.isBookFormWebView,
+    this.bookFormWebViewUrl,
+    this.bookAgainUrl,
+    this.includeBogoOffers,
+    this.isTableReservationSupported,
+    this.establishment,
+  });
+
   Restaurant.fromJson(Map<String, dynamic> json) {
     r = json['R'] != null ? R.fromJson(json['R']) : null;
     id = json['id'];
@@ -154,6 +193,13 @@ class RestaurantSearch {
   int resultsFound;
   int resultsShown;
   int resultsStart;
+
+  RestaurantSearch({
+    this.restaurants,
+    this.resultsFound,
+    this.resultsShown,
+    this.resultsStart,
+  });
 
   RestaurantSearch.fromJson(Map<String, dynamic> json) {
     resultsFound = json['results_found'];
